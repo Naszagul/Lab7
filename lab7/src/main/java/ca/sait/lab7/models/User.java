@@ -9,10 +9,12 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="user")
-@NamedQueries({})
+@NamedQueries({
+    @NamedQuery(name="User.findAll", query = "Select u from User u")   
+    })
 public class User implements Serializable {
     @Id
-    @Basic
+    @Basic(optional = false)
     @Column
     private String email;
     @Column
@@ -25,6 +27,7 @@ public class User implements Serializable {
     private String password;
 
     @ManyToOne(targetEntity = Role.class)
+    @JoinColumn(name="role", referencedColumnName = "role_id")
     private Role role; 
 
     public User(){}
