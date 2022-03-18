@@ -5,11 +5,17 @@
 package ca.sait.lab7.models;
 
 import java.io.Serializable;
+import javax.persistence.*;
 
 /**
  *
  * @author Regan
  */
+@Entity
+@Table(name="role")
+@NamedQueries({
+    @NamedQuery(name="Role.findAll", query = "Select r from Role r")   
+    })
 public class Role implements Serializable {
     private int id;
     private String name;
