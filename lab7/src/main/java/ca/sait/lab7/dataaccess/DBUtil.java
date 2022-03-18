@@ -1,21 +1,15 @@
 package ca.sait.lab7.dataaccess;
-import java.sql.*;
+
+import javax.persistence.Persistence;
+import javax.persistence.EntityManagerFactory;
 /**
  *
  * @author Regan
  */
 public class DBUtil {
-    public static void closePreparedStatement(Statement ps){
-        try{
-            if(ps!=null){
-                ps.close();
-            }
-        }catch(SQLException e){System.out.println(e);}
-    }
+    public static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("UsersPU");
 
-    public static void closeResultSet(ResultSet rs){
-        try{
-            if(rs!=null){rs.close();}
-        }catch(SQLException e){System.out.println(e);}
+    public static EntityManagerFactory getEmFactory(){
+        return emf;    
     }
 }
