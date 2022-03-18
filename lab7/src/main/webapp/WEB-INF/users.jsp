@@ -29,7 +29,10 @@
                                     <td>${user.firstName}</td>
                                     <td>${user.lastName}</td>
                                     <td>${user.active ? "Y" : "N"}</td>
-                                    <td><a href="">Edit </a><a href="">Delete</a></td>
+                                    <td>
+                                    <a href="">Edit </a>
+                                    <a href="user?action=delete&email=${user.email.replace("+", "%2B")}">Delete</a>
+                                    </td>
                                 </tr>
                             </c:forEach>
                         </tbody>
