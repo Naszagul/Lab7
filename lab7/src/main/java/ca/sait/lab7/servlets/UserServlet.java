@@ -140,5 +140,5 @@ public class UserServlet extends HttpServlet {
         catch(Exception e){Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, e);}
 
         this.getServletContext().getRequestDispatcher("/WEB-INF/users.jsp").forward(request, response);
-        }
     }
+}
