@@ -20,6 +20,7 @@
                                 <th>First name</th>
                                 <th>Last name</th>
                                 <th>Actions</th>
+                                <th>Role</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -29,14 +30,18 @@
                                     <td>${user.firstName}</td>
                                     <td>${user.lastName}</td>
                                     <td>${user.active ? "Y" : "N"}</td>
+                                    <td>${user.role.getName()}</td>
                                     <td>
-                                    <a href="">Edit </a>
+                                    <a href="user?action=edit&email=${user.email.replace("+", "%2B")}&first_name=${user.firstName}&last_name=${user.lastName}">Edit</a>
                                     <a href="user?action=delete&email=${user.email.replace("+", "%2B")}">Delete</a>
                                     </td>
                                 </tr>
+                                
                             </c:forEach>
+                                
                         </tbody>
                     </table>
+                    <a href="user?action=create">Create</a>
                 </div>
             </div>
         </div>

@@ -4,6 +4,7 @@
  */
 package ca.sait.lab7.servlets;
 
+import ca.sait.lab7.models.Role;
 import ca.sait.lab7.models.User;
 import ca.sait.lab7.services.UserService;
 import java.io.IOException;
@@ -46,16 +47,43 @@ public class UserServlet extends HttpServlet {
                 Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, e);
             }
         }
+        else if(action!=null && action.equals("edit")){
+            try{
+                String email = request.getParameter("email");
+                String first_name = request.getParameter("first_name");
+                String last_name = request.getParameter("last_name");
 
-        try{
+                request.setAttribute("email", email);
+                request.setAttribute("first_name", first_name);
+                request.setAttribute("last_name", last_name);
 
-            List<User> users = service.getAll();
-            request.setAttribute("users", users);
+
+                this.getServletContext().getRequestDispatcher("/WEB-INF/edit.jsp").forward(request, response);
+                return;
+            }
+            catch(Exception e){
+                Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, e);
+            }
         }
+        else if(action!=null && action.equals("create")){
+            try{
+                this.getServletContext().getRequestDispatcher("/WEB-INF/create.jsp").forward(request, response);
+                return;
+            }
+            catch(Exception e){
+                Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, e);
+            }
+        }
+       
+    try{
 
-        catch(Exception e){Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, e);}
+        List<User> users = service.getAll();
+        request.setAttribute("users", users);
+    }
 
-        this.getServletContext().getRequestDispatcher("/WEB-INF/users.jsp").forward(request, response);
+    catch(Exception e){Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, e);}
+        
+    this.getServletContext().getRequestDispatcher("/WEB-INF/users.jsp").forward(request, response);
     }
 
     /**
@@ -70,7 +98,47 @@ public class UserServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        this.getServletContext().getRequestDispatcher("/WEB-INF/users.jsp").forward(request, response);
-    }
+        UserService service = new UserService();
+        String action = request.getParameter("action");
 
-}
+        String email = request.getParameter("email");
+        int active = Integer.valueOf(request.getParameter("active"));
+        String first_name = request.getParameter("first_name");
+        String last_name = request.getParameter("last_name");
+        String password = request.getParameter("password");
+        int role_id = Integer.valueOf(request.getParameter("role_id"));   
+
+        String role_name = role_id==1 ? "system admin" : role_id==2 ? "regular user" : "company admin";
+        boolean active_bool = active==1;
+
+        Role role = new Role(role_id, role_name);
+
+        if(action!=null && action.equals("edit")){  
+            try{
+                service.update(email, active_bool, first_name, last_name, password, role);
+            }
+            catch(Exception e){
+                Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, e);
+            }
+        }
+
+        else if(action!=null && action.equals("create")){  
+            try{
+                service.insert(email, active_bool, first_name, last_name, password, role);     
+            }
+            catch(Exception e){
+                Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, e);
+            }
+        }
+ 
+        try{
+
+            List<User> users = service.getAll();
+            request.setAttribute("users", users);
+        }
+
+        catch(Exception e){Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, e);}
+
+        this.getServletContext().getRequestDispatcher("/WEB-INF/users.jsp").forward(request, response);
+        }
+    }
