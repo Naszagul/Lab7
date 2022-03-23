@@ -11,6 +11,10 @@ import java.util.List;
 public class RoleService {
     private RoleDB roleDB = new RoleDB();
 
+    public Role get(int i) throws Exception{
+        Role role = this.roleDB.get(i);
+        return role;
+    }
     public List<Role> getAll() throws Exception{
             List<Role> roles = this.roleDB.getAll();
             return roles;

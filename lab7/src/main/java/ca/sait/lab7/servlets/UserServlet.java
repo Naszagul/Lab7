@@ -6,6 +6,7 @@ package ca.sait.lab7.servlets;
 
 import ca.sait.lab7.models.Role;
 import ca.sait.lab7.models.User;
+import ca.sait.lab7.services.RoleService;
 import ca.sait.lab7.services.UserService;
 import java.io.IOException;
 import java.util.List;
@@ -99,6 +100,7 @@ public class UserServlet extends HttpServlet {
             throws ServletException, IOException {
 
         UserService service = new UserService();
+        RoleService roleService = new RoleService();
         String action = request.getParameter("action");
 
         String email = request.getParameter("email");
@@ -108,13 +110,13 @@ public class UserServlet extends HttpServlet {
         String password = request.getParameter("password");
         int role_id = Integer.valueOf(request.getParameter("role_id"));   
 
-        String role_name = role_id==1 ? "system admin" : role_id==2 ? "regular user" : "company admin";
-        boolean active_bool = active==1;
+        Role role;
 
-        Role role = new Role(role_id, role_name);
+        boolean active_bool = active==1;
 
         if(action!=null && action.equals("edit")){  
             try{
+                role = roleService.get(role_id);
                 service.update(email, active_bool, first_name, last_name, password, role);
             }
             catch(Exception e){
@@ -124,6 +126,7 @@ public class UserServlet extends HttpServlet {
 
         else if(action!=null && action.equals("create")){  
             try{
+                role = roleService.get(role_id);
                 service.insert(email, active_bool, first_name, last_name, password, role);     
             }
             catch(Exception e){
